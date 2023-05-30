@@ -1,103 +1,423 @@
-<!doctype html>
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot</title>
+    <style>
+        /* Styling for messenger app */
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+    
+        .messenger {
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            height: 400px; /* Set default height */
+            max-height: 400px; /* Set max height */
+            overflow-y: auto; /* Enable vertical scroll when content exceeds height */
+            display: flex;
+            flex-direction: column;
+        }
+    
+        .messenger #conversation {
+            flex: 1; /* Expand conversation to fill remaining space */
+            padding: 10px;
+        }
+    
+        form {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+    
+        form input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+    
+        form button[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            outline: none;
+        }
+    
+        .messenger .message {
+            background-color: #fff;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+    
+        .messenger .user-message {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+
+
+
+    <div class="container">
+        <div class="messenger" id="messenger">
+            <div id="conversation"></div>
+        </div>
+        <form id="message-form" method="post" action="/get_response" autocomplete="off">
+            <input type="text" id="user-input" name="user_input" placeholder="Enter your question" required>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('form').submit(function(event) {
+                event.preventDefault();
+                var form = $(this);
+                var userInput = $('#user-input').val();
+    
+                // // Create new message element
+                var newMessage = $('<div>').addClass('message user-message').text(userInput);
+    
+                // // Append new message to the conversation
+                $('#conversation').append(newMessage);
+    
+                // Clear the input field
+                
+    
+                // Scroll to the bottom of the conversation
+                scrollToBottom();
+                
+                // Send the user input to the server and receive the bot's response asynchronously
+                $.ajax({
+                    type: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    success: function(response) {
+                        // Create new message element for the bot's response
+                        var botMessage = $('<div>').addClass('message').text(response);
+    
+                        // Append the bot's response to the conversation
+                        $('#conversation').append(botMessage);
+                        $('#user-input').val('');
+                        // Scroll to the bottom of the conversation
+                        scrollToBottom();
+                    }
+                });
+            });
+    
+            // Function to scroll to the bottom of the conversation
+            function scrollToBottom() {
+            var messenger = $('#messenger');
+            messenger.animate({ scrollTop: messenger.prop('scrollHeight') }, 400);
+        }
+        });
+    </script>
+    
+</body>
+</html> -->
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <title>CHATBOT</title>
     <style>
-        .card-container {
+        @media (min-width: 300px) and (max-width: 767px)  {
+            .body{
+                display: flex;
+                flex-direction: column;
+            }
+            img{
+                width: 50px;
+                height: 50px;
+            }
+            .card{
+                width: 100%;
+                padding-bottom: 10px;
+            }
+            .messenger{
+                width:100%;
+            }
+            .card {
+                height: 100%;
+                background-color: #fff;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+              }
+              
+              .chat-header {
+                background-color: #333;
+                color: #fff;
+                padding: 10px;
+                font-size: 18px;
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+              }
+              .container {
+                max-width: 400px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+        
+            .messenger {
+                background-color: #f1f1f1;
+                border-radius: 10px;
+                height: 100%; /* Set default height */
+                 /* Set max height */
+                overflow-y: auto; /* Enable vertical scroll when content exceeds height */
+                display: flex;
+                flex-direction: column;
+            }
+            
+        
+            .messenger #conversation {
+                flex: 1; /* Expand conversation to fill remaining space */
+                padding: 10px;
+    
+            }
+        
+            form {
+                margin-top: 10px;
+                display: flex;
+                justify-content: space-between;
+            }
+        
+            form input[type="text"] {
+                flex: 1;
+                padding: 10px;
+                border: none;
+                border-radius: 5px;
+                outline: none;
+            }
+        
+            form button[type="submit"] {
+                padding: 10px 20px;
+                border: none;
+                background-color: #4CAF50;
+                color: #fff;
+                border-radius: 5px;
+                cursor: pointer;
+                outline: none;
+            }
+        
+            .messenger .message {
+                background-color: #fff;
+                padding: 10px;
+                margin-bottom: 5px;
+                border-radius: 5px;
+            }
+        
+            .messenger .user-message {
+                text-align: right;
+                background-color: #0066FF;
+                color: #fff;
+            }
+            img{
+                width:100px;
+                height:100px;
+            }
+            .texts{
+                height: 20px;
+                padding-top: 0;
+            }
+            h1{
+                margin-top: -80px;
+                font-size: 10px;
+            }
+            .txt{
+           
+                font-size: 7px;
+            }
+            .txt1{
+                margin-top: -70px;
+            }
+        }
+        @media (min-width: 768px){
+        .card {
+            height: 100%;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+          }
+          
+          .chat-header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            font-size: 18px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+          }
+          .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+    
+        .messenger {
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            height: 100%; /* Set default height */
+             /* Set max height */
+            overflow-y: auto; /* Enable vertical scroll when content exceeds height */
             display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            flex-direction: column;
         }
         
-        .card {
-            width: 33.33%;
-            height: 90%;
-        }
-
-        .card-body {
-            overflow-y: auto;
-            height: calc(100% - 2.5rem - 2.5rem); /* subtract the heights of the header and footer */
-        }
-
-        .chat-response-wrapper {
-            border-radius: 5px;
+    
+        .messenger #conversation {
+            flex: 1; /* Expand conversation to fill remaining space */
             padding: 10px;
-            margin: 10px;
-        }
 
-        .chat-response-wrapper p {
-            font-size: 0.75rem; /* Adjust as needed */
-            line-height: 1.3; /* Adjust as needed */
-            margin-bottom: 0.2rem; /* Remove default paragraph margin */
         }
-
+    
+        form {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+    
+        form input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+    
+        form button[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            outline: none;
+        }
+    
+        .messenger .message {
+            background-color: #fff;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+    
+        .messenger .user-message {
+            text-align: right;
+            background-color: #0066FF;
+            color: #fff;
+        }
+        img{
+            margin-top: 200px;
+            height: 200px; 
+            width: 200px;
+        }
+        .txt{
+            margin-top: 20px;
+        }
+        .side{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content:center;
+            
+        }
+          
+    }
     </style>
-
-    <title>Gerabot</title>
 </head>
-<body onload="bot_greet('Hello');">
-    <div class="container-fluid card-container p-10" style="background-color:lightgray">
-        <div class="card">
-            <div class="card-header font-weight-bold">
-                Gerabot
-            </div>
-            <div class="card-body chatbox" id="chatbox">
-              
-            </div>
-            <div class="card-footer">
-                <div class="input-group">
-                    <input type="text" name="msg" class="form-control" id="chat-input">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" id="send-btn">Send</button>
-                    </div>
+<body class="bg-light d-flex w-100 body" style="height: 100vh;">
+    <span class="bg-dark w-100 side">
+      <span class="w-100 d-flex justify-content-between ps-3 pe-3 pt-3">
+        <img src="{{ url_for('static', filename='lspu.png') }}" >
+        <img src="{{ url_for('static', filename='css.png') }}" >
+      </span>
+      <span class="d-flex flex-column texts">
+        <strong><h1 class="text-light text-center txt">LAGUNA STATE POLYTECHNIC UNIVERSITY</h1></strong>
+        <h6 class="text-light text-center txt txt1">STA. CRUZ, LAGUNA</h6>
+        <h4 class="text-light text-center txt txt2">Frequently Ask Question</h4>
+        <p class="text-light text-center txt txt3">(ENROLLMENT QUESTIONS & ANSWERS)</p>
+      </span>
+
+    </span>
+    <div class="card w-100 d-flex flex-column">
+        <div class="chat-header">ENROLLMENT QUESTIONS (INCOMING FRESHMEN)</div>
+        
+            <div class="messenger" id="messenger" >
+                <div id="conversation" >
+                    <div class="message">Welcome, we are happy to assist you. Just ask me a question related to enrollment.</div>
+
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Bootstrap JS and jQuery -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-    <script>
-        var rawText;
-        $("#chat-input").keypress(function(e){
-            if(e.which == 13){
-                console.log('return key pressed');
-            }
-        });
+            <form id="message-form" method="post" action="/get_response" autocomplete="off" class="">
+                <input type="text" id="user-input" name="user_input" placeholder="Enter your question" required>
+                <button type="submit">Send</button>
+            </form>
         
-        $('#send-btn').click(function() {
-            var text = $('#chat-input').val();
-            rawText = text; 
-            $('.chatbox').append('<div class="chat-response-wrapper border border-success"><p> <span class="font-weight-bold">Username </span> <span class="text-sm text-secondary" style="font-size: 0.60rem">10:35 AM</span></p><p>' + text + '</p></div>');
-            $('#chat-input').val('');
+        
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('form').submit(function(event) {
+                    event.preventDefault();
+                    var form = $(this);
+                    var userInput = $('#user-input').val();
+        
+                    // // Create new message element
+                    var newMessage = $('<div>').addClass('message user-message').text(userInput);
+        
+                    // // Append new message to the conversation
+                    $('#conversation').append(newMessage);
+        
+                    // Clear the input field
+                    
+        
+                    // Scroll to the bottom of the conversation
+                    scrollToBottom();
+                    
+                    // Send the user input to the server and receive the bot's response asynchronously
+                    $.ajax({
+                        type: form.attr('method'),
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        success: function(response) {
+                            // Create new message element for the bot's response
+                            var botMessage = $('<div>').addClass('message').text(response);
+        
+                            // Append the bot's response to the conversation
+                            $('#conversation').append(botMessage);
+                            $('#user-input').val('');
+                            // Scroll to the bottom of the conversation
+                            scrollToBottom();
+                        }
+                    });
+                });
+        
+                // Function to scroll to the bottom of the conversation
+                function scrollToBottom() {
+                var messenger = $('#messenger');
+                messenger.animate({ scrollTop: messenger.prop('scrollHeight') }, 400);
+            }
+            });
+        </script>
+        </div>
+      
 
-            // Scroll to the bottom
-            get_response();
-            $('.chatbox').scrollTop($('.chatbox')[0].scrollHeight);
-        });
-
-        function bot_greet(firstText) {
-          $.get("/get", { msg: firstText }).done(function(data) {
-            var botHtml = '<div class="chat-response-wrapper border border-primary"><p> <span class="font-weight-bold">Gerabot </span> <span class="text-sm text-secondary" style="font-size: 0.60rem">10:35 AM</span></p><p>' + data + '</p></div>';
-            $("#chatbox").append(botHtml);
-          });
-        }
-
-        function get_response() {
-          $.get("/get", { msg: rawText }).done(function(data) {
-            console.log(rawText);
-            var botHtml = '<div class="chat-response-wrapper border border-primary"><p> <span class="font-weight-bold">Gerabot </span> <span class="text-sm text-secondary" style="font-size: 0.60rem">10:35 AM</span></p><p>' + data + '</p></div>';
-            $("#chatbox").append(botHtml);
-          });
-        }
-    </script>
+    
 </body>
 </html>
