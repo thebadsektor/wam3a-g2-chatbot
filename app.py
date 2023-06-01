@@ -9,10 +9,12 @@ import random
 app = Flask(__name__)
 
 # Load the CSV data into a pandas DataFrame
-data = pd.read_csv('chatbot_data.csv', on_bad_lines='skip')
+#data = pd.read_csv('chatbot_data.csv', on_bad_lines='skip')
+data = pd.read_csv('chatbot_data.csv', delimiter='?', on_bad_lines='skip', names=['question', 'answer'])
 
 @app.route('/')
 def home():
+
     return render_template('index.html')
 
 @app.route('/get_response', methods=['POST'])
@@ -25,8 +27,7 @@ def get_response():
 
     if matching_question and matching_question[1] >= 60:
         # Get the corresponding answer for the most likely match
-        response = data.loc[matching_question[2], 'answer']
-
+         response = str(data.loc[matching_question[2], 'answer'])
     else:
         random_responses = [
             "I'm sorry, I don't have an answer for that.",
