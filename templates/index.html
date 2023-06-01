@@ -1,129 +1,4 @@
-<!-- <!DOCTYPE html>
-<html>
-<head>
-    <title>Chatbot</title>
-    <style>
-        /* Styling for messenger app */
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-    
-        .messenger {
-            background-color: #f1f1f1;
-            border-radius: 10px;
-            height: 400px; /* Set default height */
-            max-height: 400px; /* Set max height */
-            overflow-y: auto; /* Enable vertical scroll when content exceeds height */
-            display: flex;
-            flex-direction: column;
-        }
-    
-        .messenger #conversation {
-            flex: 1; /* Expand conversation to fill remaining space */
-            padding: 10px;
-        }
-    
-        form {
-            margin-top: 10px;
-            display: flex;
-            justify-content: space-between;
-        }
-    
-        form input[type="text"] {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            outline: none;
-        }
-    
-        form button[type="submit"] {
-            padding: 10px 20px;
-            border: none;
-            background-color: #4CAF50;
-            color: #fff;
-            border-radius: 5px;
-            cursor: pointer;
-            outline: none;
-        }
-    
-        .messenger .message {
-            background-color: #fff;
-            padding: 10px;
-            margin-bottom: 5px;
-            border-radius: 5px;
-        }
-    
-        .messenger .user-message {
-            text-align: right;
-        }
-    </style>
-</head>
-<body>
 
-
-
-
-    <div class="container">
-        <div class="messenger" id="messenger">
-            <div id="conversation"></div>
-        </div>
-        <form id="message-form" method="post" action="/get_response" autocomplete="off">
-            <input type="text" id="user-input" name="user_input" placeholder="Enter your question" required>
-            <button type="submit">Send</button>
-        </form>
-    </div>
-    
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('form').submit(function(event) {
-                event.preventDefault();
-                var form = $(this);
-                var userInput = $('#user-input').val();
-    
-                // // Create new message element
-                var newMessage = $('<div>').addClass('message user-message').text(userInput);
-    
-                // // Append new message to the conversation
-                $('#conversation').append(newMessage);
-    
-                // Clear the input field
-                
-    
-                // Scroll to the bottom of the conversation
-                scrollToBottom();
-                
-                // Send the user input to the server and receive the bot's response asynchronously
-                $.ajax({
-                    type: form.attr('method'),
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    success: function(response) {
-                        // Create new message element for the bot's response
-                        var botMessage = $('<div>').addClass('message').text(response);
-    
-                        // Append the bot's response to the conversation
-                        $('#conversation').append(botMessage);
-                        $('#user-input').val('');
-                        // Scroll to the bottom of the conversation
-                        scrollToBottom();
-                    }
-                });
-            });
-    
-            // Function to scroll to the bottom of the conversation
-            function scrollToBottom() {
-            var messenger = $('#messenger');
-            messenger.animate({ scrollTop: messenger.prop('scrollHeight') }, 400);
-        }
-        });
-    </script>
-    
-</body>
-</html> -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -213,6 +88,9 @@
                 cursor: pointer;
                 outline: none;
             }
+            .message-timestamp {
+  font-size: 0.8em;
+}
         
             .messenger .message {
                 background-color: #fff;
@@ -337,6 +215,10 @@
             justify-content:center;
             
         }
+        .message-timestamp {
+  font-size: 0.8em;
+}
+        
           
     }
     </style>
@@ -358,10 +240,12 @@
     <div class="card w-100 d-flex flex-column">
         <div class="chat-header">ENROLLMENT QUESTIONS (INCOMING FRESHMEN)</div>
         
-            <div class="messenger" id="messenger" >
+            <div class="messenger" id="messenger">
                 <div id="conversation" >
-                    <div class="message">Welcome, we are happy to assist you. Just ask me a question related to enrollment.</div>
-
+                    <div class="message">
+                        Welcome, we are happy to assist you. Just ask me a question related to enrollment.
+                        <div class="message-timestamp">00:00:00</div>
+                    </div>
                 </div>
             </div>
             <form id="message-form" method="post" action="/get_response" autocomplete="off" class="">
@@ -377,13 +261,18 @@
                     event.preventDefault();
                     var form = $(this);
                     var userInput = $('#user-input').val();
+                    var timestamp = new Date().toLocaleTimeString();
+                    var timestampElement = $('<div>').addClass('message-timestamp').text( timestamp);
         
                     // // Create new message element
+                    
                     var newMessage = $('<div>').addClass('message user-message').text(userInput);
+                    newMessage.append(timestampElement);
+                    //var newMessage = $('<div>').addClass('message').append(timestampElement).append($('<div>').text(userInput));
         
                     // // Append new message to the conversation
                     $('#conversation').append(newMessage);
-        
+                    
                     // Clear the input field
                     
         
@@ -397,10 +286,14 @@
                         data: form.serialize(),
                         success: function(response) {
                             // Create new message element for the bot's response
+                            var timestamp = new Date().toLocaleTimeString();
+                            var timestampElement = $('<div>').addClass('message-timestamp').text( timestamp);
                             var botMessage = $('<div>').addClass('message').text(response);
+                            botMessage.append(timestampElement);
         
                             // Append the bot's response to the conversation
                             $('#conversation').append(botMessage);
+                            
                             $('#user-input').val('');
                             // Scroll to the bottom of the conversation
                             scrollToBottom();
@@ -417,7 +310,19 @@
         </script>
         </div>
       
-
+        <script>
+            function updateTime() {
+                var currentTime = new Date();
+                var hours = currentTime.getHours();
+                var minutes = currentTime.getMinutes();
+                if (minutes < 10) {
+                    minutes = "0" + minutes;
+                }
+                var timeString = hours + ":" + minutes;
+                document.getElementById("time").innerHTML = timeString;
+            }
+            setInterval(updateTime, 1000);
+        </script>
     
 </body>
 </html>
