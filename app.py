@@ -25,7 +25,7 @@ def get_response():
     matching_question = process.extractOne(user_input, data['question'], scorer=fuzz.token_sort_ratio)
 
 
-    if matching_question and matching_question[1] >= 60:
+    if matching_question and matching_question[1] >= 0:
         # Get the corresponding answer for the most likely match
          response = str(data.loc[matching_question[2], 'answer'])
     else:
@@ -33,7 +33,7 @@ def get_response():
             "I'm sorry, I don't have an answer for that.",
             "I'm still learning and don't have information on that.",
             "I'm afraid I can't help with that question.",
-            "That's a good question. Unfortunately, I don't have the answer.",
+            "That's a good question. Unfortunately, I don't have the answer."
         ]
         response = random.choice(random_responses)
 
@@ -43,3 +43,5 @@ def get_response():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
